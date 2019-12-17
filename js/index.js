@@ -1,7 +1,19 @@
 import axios from 'axios';
-co
 
-dataArray = [
+$(document).ready(function () {
+    let config = {
+        enableTime: true,
+        dateFormat: "d-m-Y H:i",
+        locale: "ru"
+    };
+
+    $("#start_audit_date").flatpickr(config);
+    $("#end_audit_date").flatpickr(config);
+
+})
+
+let final_office_array = [];
+let dataArray = [
     {
         "id": "0x56E0452B480123AD",
         "code": "Office_А98000",
@@ -55,7 +67,7 @@ dataArray = [
 ];
 
 function searchOffice(name) {
-console.log("search fired");
+    console.log("search fired");
 
     let config = {
         crossdomain: true,
@@ -72,7 +84,8 @@ console.log("search fired");
     axios.get('https://bu-online.beeline.ru/custom_web_template.html?object_id=6758698952191659595', config
     )
         .then(function (response) {
-            console.log(response);
+            console.log(response.data.data);
+            buildTable(response.data, $('#table-result'))
             return response.data;
         })
         .catch(function (error) {
@@ -90,13 +103,66 @@ let typingInterval = 1000;
 search_input.onkeyup = function () {
     if (this.value.length >= 5) {
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(()=>{searchOffice(search_input.value)}, typingInterval)
+        typingTimer = setTimeout(() => { searchOffice(search_input.value) }, typingInterval)
     }
 
 }
 
+let chooseOffice = (elem) => {
+    tr_elem = elem.parentNode.parentNode;
+    if (elem.classList.contains('btn-primary')) {
+        elem.classList.remove('btn-primary');
+        elem.classList.add('btn-warning');
+        elem.firstChild.data = "Отменить";
+        let tempObj = {};
+        tempObj.id = tr_elem.getAttribute('id');
+        tr_childs = Array.from(tr_elem.childNodes).filter((elem)=> {
+            return elem.nodeName == 'TD';
+        });
+        tempObj.code = tr_childs[0].innerText;
+        tempObj.name = tr_childs[1].innerText;
 
-function buildTable(data, elem) {
-    let newTable = document.createElement('table');
+        final_office_array.push(tempObj);
+    } else {
+        elem.classList.remove('btn-warning');
+        elem.classList.add('btn-primary');  
+        elem.firstChild.data = "Выбрать ";
+        final_office_array = final_office_array.filter((elem)=> {
+            return elem.id.toString() != tr_elem.getAttribute('id').toString();
+        })
+    }
     
 }
+
+
+
+function buildTable(data, elem) {
+    
+
+    let rows_array = data.data.map((elem) => {
+
+        return `<tr id="${elem.id}">
+                    <td>${elem.code} <br> <button type="button" onclick="chooseOffice(this)" class="btn btn-primary">Выбрать !</button></td>
+                    <td>${elem.name}</td>
+                    
+                </tr>`
+    })
+
+    let str = `
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Код точки</th>
+        <th>Адрес</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows_array.join('')}
+    </tbody>
+  </table>`;
+
+    elem.html(`${str}`);
+
+}
+
+

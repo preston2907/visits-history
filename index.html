@@ -11,36 +11,203 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 
 </head>
 
 <body>
 
   <div class="card head-item">
-    
-    <h5 class="card-header">История посещения офиов РН и РСМС</h5>
-    
+
+    <h5 class="card-header">История посещения офисов РН и РСМС</h5>
+
     <div class="card-body">
-      <h5 class="card-title">Special title treatment</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <button href="#" class="btn btn-primary" id="search">Go somewhere</button>
+      <h5 class="card-title">Заполнение новой истории посещения</h5>
+      <p class="card-text">Заполните все необходимые поля</p>
 
-      <form class="form-inline">
-        <div class="form-group row">
-          <label class="col-sm-8" for="office_search">Введите код офиса или адрес</label>
-          <input type="text" name="" id="office_search" class="form-control col-sm-4" placeholder=""
-            aria-describedby="helpId">
-        </div>
-      </form>
 
-      <div id='table-result'>
-        
+      <div class="form-group form-inline">
+        <label class="col-sm-2" for="user_fio">ФИО проверяющего</label>
+        <input type="text" class="form-control col-sm-4" name="" id="user_fio" aria-describedby="helpId" placeholder=""
+          value="Макрыгин Анатолий Игоревич" disabled>
       </div>
-      
-    </div>
+
+      <div class="form-group form-inline">
+        <label class="col-sm-2" for="user_position">Должность проверяющего</label>
+        <input type="text" class="form-control col-sm-4" name="" id="user_position" aria-describedby="helpId"
+          placeholder="" value="Супер пупер специалист" disabled>
+      </div>
+
+      <div class="form-group form-inline">
+        <label class="col-sm-2" for="start_audit_date">Начало аудита</label>
+        <input type="text" class="form-control col-sm-4" name="" id="start_audit_date" aria-describedby="helpId"
+          placeholder="Нажмите для ввода даты">
+        <label class="col-sm-2" for="end_audit_date">Конец аудита</label>
+        <input type="text" class="form-control col-sm-4" name="" id="end_audit_date" aria-describedby="helpId"
+          placeholder="Нажмите для ввода даты">
+      </div>
+
+      <div class="form-group form-inline">
+        <label class="col-sm-2" for="filial">Филиал проверки</label>
+        <select class="form-control col-sm-4" name="" id="filial">
+            <option>Абаканский филиал</option>
+            <option>Амурский филиал</option>
+            <option>Архангельский филиал</option>
+            <option>Астраханский филиал</option>
+            <option>Барнаульский филиал</option>
+            <option>Белгородский филиал</option>
+            <option>Брянский филиал</option>
+            <option>Бурятский филиал</option>
+            <option>Владикавказский филиал</option>
+            <option>Владимирский филиал</option>
+            <option>Волгоградский филиал</option>
+            <option>Вологодский филиал</option>
+            <option>Воронежский филиал</option>
+            <option>Грозненский филиал</option>
+            <option>Екатеринбургский филиал</option>
+            <option>Ивановский филиал</option>
+            <option>Ижевский филиал</option>
+            <option>Иркутский филиал</option>
+            <option>Йошкар-Олинский филиал</option>
+            <option>Казанский филиал</option>
+            <option>Калининградский филиал</option>
+            <option>Калужский филиал</option>
+            <option>Камчатский филиал</option>
+            <option>Кемеровский филиал</option>
+            <option>Кировский филиал</option>
+            <option>Костромской филиал</option>
+            <option>Краснодарский филиал</option>
+            <option>Красноярский филиал</option>
+            <option>Курганский филиал</option>
+            <option>Курский филиал</option>
+            <option>Липецкий филиал</option>
+            <option>Магаданский филиал</option>
+            <option>Махачкалинский филиал</option>
+            <option>Московский филиал</option>
+            <option>Мурманский филиал</option>
+            <option>Назрановский филиал</option>
+            <option>Нальчикский филиал</option>
+            <option>Нижегородский филиал</option>
+            <option>Новгородский филиал</option>
+            <option>Новосибирский филиал</option>
+            <option>Омский филиал</option>
+            <option>Оренбургский филиал</option>
+            <option>Орловский филиал</option>
+            <option>Пензенский филиал</option>
+            <option>Пермский филиал</option>
+            <option>Петрозаводский филиал</option>
+            <option>Приморский филиал</option>
+            <option>Псковский филиал</option>
+            <option>Ростовский-на-Дону филиал</option>
+            <option>Рязанский филиал</option>
+            <option>Самарский филиал</option>
+            <option>Санкт-Петербургский филиал</option>
+            <option>Саранский филиал</option>
+            <option>Саратовский филиал</option>
+            <option>Смоленский филиал</option>
+            <option>Сочинский филиал</option>
+            <option>Ставропольский филиал</option>
+            <option>Сургутский филиал</option>
+            <option>Сыктывкарский филиал</option>
+            <option>Тамбовский филиал</option>
+            <option>Тверской филиал</option>
+            <option>Тольяттинский филиал</option>
+            <option>Томский филиал</option>
+            <option>Тульский филиал</option>
+            <option>Тюменский филиал</option>
+            <option>Ульяновский филиал</option>
+            <option>Уфимский филиал</option>
+            <option>Хабаровский филиал</option>
+            <option>Чебоксарский филиал</option>
+            <option>Челябинский филиал</option>
+            <option>Черкесский филиал</option>
+            <option>Читинский филиал</option>
+            <option>Элистинский филиал</option>
+            <option>Южно-Сахалинский филиал</option>
+            <option>Якутский филиал</option>
+            <option>Ярославский филиал</option>            
+        </select>
+      </div>
+
+      <div class="form-group form-inline">
+        <label class="col-6 col-sm-2" for="office_count">Выбрано офисов:</label>
+        <input type="text" class="form-control col-2 col-sm-1" name="" id="office_count" aria-describedby="helpId"
+          value="0" disabled>
+        <div class="col-4 col-sm-4">
+          <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#choose_office">Выбрать</button>
+        </div>
+      </div>
+
+      <div class="choosed_officess">
+        <h4  class="card-title">Выбраны офисы:</h4>
+        <div class="form-group form-inline ">
+          <div class="col-sm-4 "> 
+              <label class="justify-content-start" >Точка: <b style="margin-left:15px;">А98000</b></label>
+              <label class="justify-content-start" ><span><b>г. Москва, ул.Пресненский Вал, д.1/2 с2</b></span></label>
+          </div>
+              <textarea class="form-control col-sm-8" name="" id="" rows="3" placeholder="Введи текст комментария к посещению"></textarea>
+        </div>
+        <div class="form-group form-inline ">
+          <div class="col-sm-4 "> 
+              <label class="justify-content-start" >Точка: <b style="margin-left:15px;">А98000</b></label>
+              <label class="justify-content-start" ><span><b>г. Москва, ул.Пресненский Вал, д.1/2 с2</b></span></label>
+          </div>
+              <textarea class="form-control col-sm-8" name="" id="" rows="3" placeholder="Введи текст комментария к посещению"></textarea>
+        </div>
+        <div class="form-group form-inline ">
+          <div class="col-sm-4 "> 
+              <label class="justify-content-start" >Точка: <b style="margin-left:15px;">А98000</b></label>
+              <label class="justify-content-start" ><span><b>г. Москва, ул.Пресненский Вал, д.1/2 с2</b></span></label>
+          </div>
+              <textarea class="form-control col-sm-8" name="" id="" rows="3" placeholder="Введи текст комментария к посещению"></textarea>
+        </div>
+        <div class="form-group form-inline ">
+          <div class="col-sm-4 "> 
+              <label class="justify-content-start" >Точка: <b style="margin-left:15px;">А98000</b></label>
+              <label class="justify-content-start" ><span><b>г. Москва, ул.Пресненский Вал, д.1/2 с2</b></span></label>
+          </div>
+              <textarea class="form-control col-sm-8" name="" id="" rows="3" placeholder="Введи текст комментария к посещению"></textarea>
+        </div>
+
+      </div>
+
+
+
   </div>
 
 
+  <!-- Modal -->
+  <div class="modal fade" id="choose_office" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="form-inline">
+                <div class="form-group row">
+                  <label class="col-sm-8 " for="office_search">Введите код офиса или адрес</label>
+                  <input type="text" name="" id="office_search" class="form-control col-sm-4" placeholder=""
+                    aria-describedby="helpId">
+                </div>
+              </form>
+        
+              <div id='table-result'>
+                
+        
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -53,6 +220,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
   <script src="js/index.js"></script>
 </body>
 

@@ -19,15 +19,16 @@ $(document).ready(function () {
     $("#saver_choice_button").on('click', showChoice);
     $("#saver").on('click', saveReport);
 
-    
+
 })
 
 let final_office_array = [];
 
 
 function searchOffice(name) {
-    console.log("search fired");
-
+    
+    $('.loader-wrapper').show();
+    $('#table-result').html('');
     let config = {
         crossdomain: true,
         withCredentials: true,
@@ -128,7 +129,7 @@ function buildTable(data, elem, isSearch) {
       ${rows_array.join('')}
     </tbody>
   </table>`;
-
+    $('.loader-wrapper').hide();
     elem.html(`${str}`);
 
     let allbuttons = document.querySelectorAll('.chooser');
@@ -147,7 +148,7 @@ function showChoice() {
                 <label class="justify-content-start" >Точка: <b style="margin-left:15px;">${elem.code}</b></label>
                 <label class="justify-content-start" ><span><b>${elem.name}</b></span></label>
             </div>
-            <textarea class="form-control col-sm-5" name="" id="" rows="3" data-id="${elem.id}" placeholder="Введи текст комментария к посещению"></textarea>
+            <textarea class="form-control col-sm-5 validate" name="" id="" rows="3" data-id="${elem.id}" placeholder="Введи текст комментария к посещению"></textarea>
             <div class="col-sm-3 justify-content-center">
             <button type="button" class="btn btn-danger remover">Удалить</button>
 
@@ -187,47 +188,83 @@ function showChoice() {
 
 function removeOffice(elem) {
 
-         let tr_elem = elem.parentNode.parentNode;
-        final_office_array = final_office_array.filter((elem) => {
-            return elem.id.toString() != tr_elem.getAttribute('del-id').toString();
-        })
-    
-        
-        $('#office_count').val(final_office_array.length)
-        tr_elem.parentNode.removeChild(tr_elem);
-        
-        if (final_office_array.length === 0 ) {
-            $('.choosed_officess').html('');
-        } 
-    
+    let tr_elem = elem.parentNode.parentNode;
+    final_office_array = final_office_array.filter((elem) => {
+        return elem.id.toString() != tr_elem.getAttribute('del-id').toString();
+    })
+
+
+    $('#office_count').val(final_office_array.length)
+    tr_elem.parentNode.removeChild(tr_elem);
+
+    if (final_office_array.length === 0) {
+        $('.choosed_officess').html('');
+    }
+
 }
 
+function validator() {
+    let mark = true;
+    let error_string = '';
+    if (final_office_array.length === 0) {
+        error_string += 'Выберите минимум 1 офис!\n';
+    }
+    let validateFields = document.querySelectorAll('.validate');
+    validateFields.forEach((elem) => {
+        if (elem.value == '') {
+            elem.classList.add('not-valid');
+            elem.onclick = (elem) => remove_not_valid(elem.target);
+            mark = false;
+        }
+    })
+    if (mark === false) {
+        error_string += 'Не заполнены обязательные поля!'
+    }
+    console.log(error_string)
+    if (error_string !== '') {
+        mark = false;
+        alert(error_string)
+    }
+
+    return mark;
+
+}
+
+function remove_not_valid(elem) {
+    elem.classList.remove('not-valid');
+}
 
 function saveReport() {
 
-    let final_arr = final_office_array.map((elem)=> {
-        return {
-            id: elem.id,
-            comment: document.querySelector(`textarea[data-id="${elem.id}"]`).value
-        }
-    })
-    console.log(final_arr);
+    if (validator()) {
 
-    $.ajax({
-        url: 'https://bu-online.beeline.ru/custom_web_template.html?object_id=6758698952191659595&use_mode=save_report',
-        crossDomain: true,
-        xhrFields: {
-            withCredentials: true
-        },
-        method: "POST",
-        data: {
-            start_date: $('#start_audit_date').val(),
-            finish_date: $('#end_audit_date').val(),
-            filial: $('#filial').val(),
-            office_array: JSON.stringify(final_arr),
-            comment: $('#additional_comment').val()
-        }
+        let final_arr = final_office_array.map((elem) => {
+            return {
+                id: elem.id,
+                comment: document.querySelector(`textarea[data-id="${elem.id}"]`).value
+            }
+        })
+        console.log(final_arr);
+
+        $.ajax({
+            url: 'https://bu-online.beeline.ru/custom_web_template.html?object_id=6758698952191659595&use_mode=save_report',
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
+            method: "POST",
+            data: {
+                start_date: $('#start_audit_date').val(),
+                finish_date: $('#end_audit_date').val(),
+                filial: $('#filial').val(),
+                office_array: JSON.stringify(final_arr),
+                comment: $('#additional_comment').val()
+            }
 
         }
-    )
+        ).done(function () {
+            alert( "Отчет сохранен!");
+            document.location.reload();
+            });
+    }
 }

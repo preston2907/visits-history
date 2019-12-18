@@ -36,10 +36,10 @@
       
       <div class="form-group form-inline">
         <label class="col-sm-2 justify-content-start" for="start_audit_date">Начало аудита</label>
-        <input type="text" class="form-control col-sm-4" name="" id="start_audit_date" aria-describedby="helpId"
+        <input type="text" class="form-control col-sm-4 validate" name="" id="start_audit_date" aria-describedby="helpId"
           placeholder="Нажмите для ввода даты">
         <label class="col-sm-2" for="end_audit_date">Конец аудита</label>
-        <input type="text" class="form-control col-sm-4" name="" id="end_audit_date" aria-describedby="helpId"
+        <input type="text" class="form-control col-sm-4 validate" name="" id="end_audit_date" aria-describedby="helpId"
           placeholder="Нажмите для ввода даты">
       </div>
 
@@ -147,7 +147,7 @@
 </div>
 
 <div class="row">
-  <div class="col-6 col-sm-2"><button type="button" id="reloader" class="btn btn-outline-secondary custom_buttons">Очистить</button></div>
+  <div class="col-6 col-sm-2"><button type="button" id="reloader" onclick="document.location.reload()" class="btn btn-outline-secondary custom_buttons">Очистить</button></div>
   <div class="col-6 col-sm-2"><button type="button" id="saver" class="btn btn-success custom_buttons">Сохранить</button></div>
 </div>
 
@@ -175,7 +175,11 @@
                   aria-describedby="helpId">
               </div>
             </form>
+            <div class="loader-wrapper">
 
+              <div class="loader">Loading...</div>
+            </div>
+              
             <div id='table-result'>
 
 

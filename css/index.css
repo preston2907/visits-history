@@ -2,3 +2,13 @@
     max-width: 1146px;
     margin: 0 auto;
 }
+
+.remover {
+    margin: 0 auto;
+    width: 150px;
+    display: block;
+}
+
+.custom_buttons{
+    width: 100%;
+}

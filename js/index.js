@@ -1,70 +1,29 @@
 import axios from 'axios';
+import $ from 'jquery';
+import flatpickr from "flatpickr";
+import { Russian } from "flatpickr/dist/l10n/ru.js"
+import 'flatpickr/dist/flatpickr.min.css';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/index.css'
 
 $(document).ready(function () {
     let config = {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
-        locale: "ru"
+        locale: Russian
     };
 
-    $("#start_audit_date").flatpickr(config);
-    $("#end_audit_date").flatpickr(config);
+    flatpickr("#start_audit_date", config);
+    flatpickr("#end_audit_date", config);
+    $("#saver_choice_button").on('click', showChoice);
+    $("#saver").on('click', saveReport);
 
+    
 })
 
 let final_office_array = [];
-let dataArray = [
-    {
-        "id": "0x56E0452B480123AD",
-        "code": "Office_А98000",
-        "name": "г. Москва, ул.Пресненский Вал, д.1/2 с2"
-    },
-    {
-        "id": "0x56E045350582610B",
-        "code": "Office_059000",
-        "name": "г.Москва, Ленинградское ш., д.8,стр.1"
-    },
-    {
-        "id": "0x56E0454441897069",
-        "code": "Office_103000",
-        "name": "г. Москва, Проезд Стратонавтов, 9"
-    },
-    {
-        "id": "0x56E045604AB82313",
-        "code": "Office_П38000",
-        "name": "г.Москва, ул. Правобережная, д.1б (ТЦ Капитолий)"
-    },
-    {
-        "id": "0x56E0452B447F6277",
-        "code": "Office_А99000",
-        "name": "г. Москва, ул. Таганская д.1"
-    },
-    {
-        "id": "0x56E0455144B01166",
-        "code": "Office_926000",
-        "name": "г.Москва, ул.Хлобыстова, д.26, стр.2"
-    },
-    {
-        "id": "0x56E04527274E5F59",
-        "code": "Office_Q38000",
-        "name": "г. Москва, Алтуфьевское ш., д. 88а"
-    },
-    {
-        "id": "0x56E045457E85520F",
-        "code": "Office_910000",
-        "name": "г.Москва, Дмитровское ш., д.24А, стр.1"
-    },
-    {
-        "id": "0x56E0455D699D33F5",
-        "code": "Office_А55000",
-        "name": "г.Москва, пр-д. Локомотивный, д.2б, стр.1"
-    },
-    {
-        "id": "0x56E0455E7ACB50BE",
-        "code": "Office_П15000",
-        "name": "г.Москва, ул. Бутырская, д.97, стр.7"
-    }
-];
+
 
 function searchOffice(name) {
     console.log("search fired");
@@ -85,7 +44,7 @@ function searchOffice(name) {
     )
         .then(function (response) {
             console.log(response.data.data);
-            buildTable(response.data, $('#table-result'))
+            buildTable(response.data.data, $('#table-result'), true);
             return response.data;
         })
         .catch(function (error) {
@@ -109,43 +68,52 @@ search_input.onkeyup = function () {
 }
 
 let chooseOffice = (elem) => {
-    tr_elem = elem.parentNode.parentNode;
+    let tr_elem = elem.parentNode.parentNode;
     if (elem.classList.contains('btn-primary')) {
         elem.classList.remove('btn-primary');
         elem.classList.add('btn-warning');
         elem.firstChild.data = "Отменить";
         let tempObj = {};
         tempObj.id = tr_elem.getAttribute('id');
-        tr_childs = Array.from(tr_elem.childNodes).filter((elem)=> {
+        let tr_childs = Array.from(tr_elem.childNodes).filter((elem) => {
             return elem.nodeName == 'TD';
         });
-        tempObj.code = tr_childs[0].innerText;
+        tempObj.code = tr_childs[0].firstChild.data;
         tempObj.name = tr_childs[1].innerText;
 
         final_office_array.push(tempObj);
     } else {
         elem.classList.remove('btn-warning');
-        elem.classList.add('btn-primary');  
+        elem.classList.add('btn-primary');
         elem.firstChild.data = "Выбрать ";
-        final_office_array = final_office_array.filter((elem)=> {
+        final_office_array = final_office_array.filter((elem) => {
             return elem.id.toString() != tr_elem.getAttribute('id').toString();
         })
     }
-    
+
 }
 
 
 
-function buildTable(data, elem) {
-    
+function buildTable(data, elem, isSearch) {
 
-    let rows_array = data.data.map((elem) => {
 
-        return `<tr id="${elem.id}">
-                    <td>${elem.code} <br> <button type="button" onclick="chooseOffice(this)" class="btn btn-primary">Выбрать !</button></td>
-                    <td>${elem.name}</td>
-                    
-                </tr>`
+    let rows_array = data.map((elem) => {
+
+        if (isSearch === true) {
+
+            return `<tr id="${elem.id}">
+            <td>${elem.code}<br><button type="button" class="btn btn-primary chooser" >Выбрать</button></td>
+            <td>${elem.name}</td>
+            
+            </tr>`
+        } else {
+            return `<tr id="${elem.id}">
+            <td>${elem.code} <br> <button type="button" class="btn btn-danger remover" >Удалить</button></td>
+            <td>${elem.name}</td>
+            
+            </tr>`
+        }
     })
 
     let str = `
@@ -163,6 +131,103 @@ function buildTable(data, elem) {
 
     elem.html(`${str}`);
 
+    let allbuttons = document.querySelectorAll('.chooser');
+
+    allbuttons.forEach((elem) => {
+        elem.addEventListener("click", () => chooseOffice(elem));
+    })
+
+}
+
+function showChoice() {
+    let rows_array = final_office_array.map((elem) => {
+        return `
+        <div class="form-group form-inline " del-id="${elem.id}">
+            <div class="col-sm-4 "> 
+                <label class="justify-content-start" >Точка: <b style="margin-left:15px;">${elem.code}</b></label>
+                <label class="justify-content-start" ><span><b>${elem.name}</b></span></label>
+            </div>
+            <textarea class="form-control col-sm-5" name="" id="" rows="3" data-id="${elem.id}" placeholder="Введи текст комментария к посещению"></textarea>
+            <div class="col-sm-3 justify-content-center">
+            <button type="button" class="btn btn-danger remover">Удалить</button>
+
+          </div>
+        </div>
+        `
+    });
+
+    if (rows_array.length > 0) {
+
+        let str = `
+        <h4  class="card-title">Выбраны офисы:</h4>
+        ${rows_array.join('')}
+        `
+        $('.choosed_officess').html(`${str}`);
+        if ($(".modal-backdrop").length > -1) {
+            $(".modal-backdrop").not(':first').remove();
+        }
+        $('#choose_office').modal('toggle');
+
+
+        $('#office_count').val(final_office_array.length)
+
+        let allbuttons = document.querySelectorAll('.remover');
+
+        allbuttons.forEach((elem) => {
+            elem.addEventListener("click", () => removeOffice(elem));
+        })
+    } else {
+        alert('Выберите хотя бы один офис!')
+    }
+
+
+
+
+}
+
+function removeOffice(elem) {
+
+         let tr_elem = elem.parentNode.parentNode;
+        final_office_array = final_office_array.filter((elem) => {
+            return elem.id.toString() != tr_elem.getAttribute('del-id').toString();
+        })
+    
+        
+        $('#office_count').val(final_office_array.length)
+        tr_elem.parentNode.removeChild(tr_elem);
+        
+        if (final_office_array.length === 0 ) {
+            $('.choosed_officess').html('');
+        } 
+    
 }
 
 
+function saveReport() {
+
+    let final_arr = final_office_array.map((elem)=> {
+        return {
+            id: elem.id,
+            comment: document.querySelector(`textarea[data-id="${elem.id}"]`).value
+        }
+    })
+    console.log(final_arr);
+
+    $.ajax({
+        url: 'https://bu-online.beeline.ru/custom_web_template.html?object_id=6758698952191659595&use_mode=save_report',
+        crossDomain: true,
+        xhrFields: {
+            withCredentials: true
+        },
+        method: "POST",
+        data: {
+            start_date: $('#start_audit_date').val(),
+            finish_date: $('#end_audit_date').val(),
+            filial: $('#filial').val(),
+            office_array: JSON.stringify(final_arr),
+            comment: $('#additional_comment').val()
+        }
+
+        }
+    )
+}

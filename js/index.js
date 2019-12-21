@@ -6,6 +6,10 @@ import 'flatpickr/dist/flatpickr.min.css';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css'
+import 'nodelist-foreach-polyfill';
+import Promise from 'promise-polyfill';
+import 'promise-polyfill/src/polyfill';
+import 'array-from-polyfill';
 
 $(document).ready(function () {
     let config = {
@@ -264,7 +268,7 @@ function saveReport() {
         }
         ).done(function () {
             alert( "Отчет сохранен!");
-            document.location.reload();
+            document.location.href = 'https://bu-online.beeline.ru/view_doc.html?mode=doc_type&custom_web_template_id=6705784241838580139&doc_id=6298657041915513568';
             });
     }
 }

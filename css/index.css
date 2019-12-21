@@ -17,6 +17,15 @@
     box-shadow: red 0 0 10px 1px;
 }
 
+button {
+  background: none;
+}
+.WTCSS-user-info > .wrapper {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
 .loader-wrapper{
     height: 100px;
     display: none;
